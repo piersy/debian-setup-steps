@@ -1,0 +1,182 @@
+locate sudoers
+apt install locate
+apt update
+ip a
+nmcli
+nmcli device show
+nmcli -h
+nmcli d -h
+nmcli d status 
+lspci
+ip a
+ip link -h
+ip link help
+ip a
+ip a
+ip link wlp59s0 
+ip link help | less
+ip link help
+clear
+ip link help
+ip link set wlp59s0 up 
+ip a
+bluetoothctl 
+apt get update
+apt update
+apt upgrade
+vim.tiny /etc/apt/sources.list
+apt update
+lsmod
+lsmod | less
+man rmmmod
+man rmmod
+modprobe
+modprobe -h
+apt install firmware-atheros
+dmesg 
+apt policy firmware-atheros
+rmmod ath10k_pci
+modprobe ath10k_pci
+dmesg
+ip link set wlp59s0 up 
+ip a
+sudo rm /lib/firmware/ath10k/QCA6174/hw3.0/*
+sudo wget -O /lib/firmware/ath10k/QCA6174/hw3.0/board.bin https://github.com/kvalo/ath10k-firmware/blob/master/QCA6174/hw3.0/board.bin?raw=true
+sudo wget -O /lib/firmware/ath10k/QCA6174/hw3.0/board-2.bin https://github.com/kvalo/ath10k-firmware/blob/master/QCA6174/hw3.0/board-2.bin?raw=true
+sudo wget -O /lib/firmware/ath10k/QCA6174/hw3.0/firmware-4.bin https://github.com/kvalo/ath10k-firmware/blob/master/QCA6174/hw3.0/firmware-4.bin_WLAN.RM.2.0-00180-QCARMSWPZ-1?raw=true
+ls /lib/firmware/ath10k/QCA6174/hw3.0
+less /etc/apt/sources.list
+lspci
+dmesg
+apt install locate
+updatedb
+locate kbl_dmc_ver
+locate i915
+ls /lib/firmware/
+apt search i915
+apt instal
+apt install tree
+tree /lib/firmware/
+mv ~/Downloads/kbl_dmc_ver1_04.bin /lib/firmware/i915
+sudo mv /lib/firmware/i915 ~/Downloads/kbl_dmc_ver1_04.bin
+mkdir /lib/firmware/i915
+mv ~/Downloads/kbl_dmc_ver1_04.bin /lib/firmware/i915
+ls /lib/firmware/i915
+dmesg 
+sudo wget -O /lib/firmware/ath10k/QCA6174/hw3.0/firmware-6.bin https://github.com/kvalo/ath10k-firmware/raw/master/QCA6174/hw3.0/4.4.1.c3/firmware-6.bin_RM.4.4.1.c3-00013-QCARMSWPZ-1?raw=true
+ls /lib/firmware/ath10k/QCA6174/hw3.0/
+apt install firmware-nonfree
+dmesg
+vim /etc/apt/sources.list
+vim.tiny /etc/apt/sources.list
+apt update
+uname -r|sed 's/[^-]*-[^-]*-//'
+apt install linux-headers-$(uname -r|sed 's/[^-]*-[^-]*-//') nvidia-driver
+history > log
+less log 
+less log 
+dmesg
+uname
+uname -a
+less log
+apt policy firmware-misc-nonfree
+mv  /lib/firmware/i915/kbl_dmc_ver1_04.bin ~/Downloads/kbl_dmc_ver1_04.bin
+apt install firmware-misc-nonfree
+ls  /lib/firmware/i915/ 
+dmesg
+lspci | grep 3D
+glxinfo
+apt install glxinfo
+sudo glxinfo
+apt install mesa-utils
+glxinfo 
+glxinfo | grep OpenGL
+dmesg > dmesg_log
+less dmesg_log 
+dmesg 
+df -h
+free -h
+powertop 
+powertop 
+less /var/log/syslog 
+vim /etc/default/grub
+vim.tiny /etc/default/grub
+update-grub
+xrandr 
+man xrandr
+xrandr --ouutput DP-3 --auto
+xrandr --output DP-3 --auto
+powertop
+lspci
+lspci -v
+sensors
+cat /proc/cpuinfo 
+history | less
+powertop 
+powertop 
+powertop 
+powertop
+powertop --auto-tune
+powertop
+powertop
+sensors
+apt install acpitool
+acpitool 
+man acpitool
+acpitool -e
+acpitool -e | less
+apt install bumblebee
+powertop 
+apt install google-chrome
+apt search chrome
+ip a
+dmesg
+ip a
+lspci
+lspci -f
+lspci -v
+lspci -v | less
+powertop
+apt search opera
+apt list opera
+dpkg -l opera
+dpkg -l "*opera*"
+cd Downloads/
+ls
+dpkg -i google-chrome-stable_current_amd64.deb
+ls
+dpkg -i google-chrome-stable_current_amd64.deb
+rm google-chrome-stable_current_amd64.deb*
+ls
+ls
+ls -l
+ls -l
+ls -l
+ls -l
+ls -l
+ls -l
+ls -l
+ls -l
+ls -l
+ls -l
+ls -l
+ls -l
+ls -l
+ls -l
+ls -l
+ls -l
+ls -l
+for ; do sleep 1; ls -l; done
+for x in {1..100}; do sleep 1; ls -l; done
+for x in {1..100}; do sleep 1; ls -l; done
+dpkg -i google-chrome-stable_current_amd64\(1\).deb 
+apt install --fix-broken
+ip aa
+ip a
+google-chrome-stable 
+locate sudoers
+vim.tiny /etc/sudoers.d/README 
+visudo
+groups
+visudo
+adduser piers sudo
