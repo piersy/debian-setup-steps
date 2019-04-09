@@ -2,14 +2,6 @@
 
 Debian Stretch
 
-It seems that debian when used with lightdm does not execute ~/.xinitrc
-
-Instead the flow is that lightdm loads a desktop file from /usr/share/xsessions desktop files can execute only a single command using the Exec entry, if you wan't to initialise something (or execute more than one program) at this point you need to write a script and call it from the Exec entry.
-
-Light dm has a desktop file as well with the Exec entry specifying default hich actually means that light dm will look in ~/.dmrc to find out what session to load by defalut.
-
-If you want to initialise something that is going to be shared by all window managers you can edit/etc/lightdm/lightdm.conf and set display-setup-script or greeter-setup-script to perform general setup.
-
 Adding custom drivers
 
 # Preinstall
@@ -44,6 +36,10 @@ Download the netinstaller with non-free firmware not the basic one, this will
 save you a heap of trouble. Find the added non free firmware iso
 [here](https://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware)
 you will need to click through a few pages to find the right iso for you.
+
+Note: Despite complaining during install that certain firmware files could not
+be found, my newtwork card did actually work, so sometimes it's just worth
+pressing on to see if stuff works.
 
 Copy it onto a usb drive like so:
 ```
@@ -101,24 +97,14 @@ your kernel can be updgraded automatically.
 
 ## Installing GRUB
 
-When I tried to install grub it failed
-We need to create a boot partition ext4 unencrypted at '/boot' and then use the
-rest of the space as physical drive for encryption. Inside which we can
-configure as many partitions as we want using lvm.
+When I tried to install grub it failed to install on a fully encrypted disk.
 
-> Configure encrypted volumes
-
-At this point the partitions will be written to the disk, takes a while.
-
-> Configure the Logical Volume Manager
-
-Note: Despite complaining that certain firmware files could not be found, my newtwork card did actually work, so sometimes it's just worth pressing on to see if stuff works.
+The workaround is to drop to the terminal ALT+F2 and edit /target/etc/default/grub to add the line
+`GRUB_ENABLE_CRYPTODISK=y`
+And then retry the grub install
 
 -----
 
-In fact I did install grub by dropping to the terminal ALT+F2 and editing /target/etc/default/grub to add the line
-`GRUB_ENABLE_CRYPTODISK=y`
-And then retrying the grub install
 
 ## Installing Software
 
@@ -127,75 +113,34 @@ Should you install the standard system utilities:
 
 # Post install
 
-Share sudo between terminals
+## Debian fixes
+
+Remove the bell
+
+Add 'xset b off' to `~/.profile` or some file that is executed on startup. You
+can use the following to find files sorted by access date which is useful to
+see what is being consulted on startup.
+```
+find . -type f -printf '%a %p\n' | sort -h | less
+```
+
+## Environment setup
+
+If you want to share sudo between terminals
 create file /etc/sudoers.d/01_local with content `Defaults !tty_tickets`
 
-install packages i need
+Download and install chrome https://www.google.com/chrome. I don't store
+passwords in chrome so I don't need a keyring itegration.
 
-sudo apt install
-git
-locate
-fwupd // handles firmware updates automatically
-tree
-htop
-checkinstall
-python-pip3 // for installing pynvim
-python-pip // for installing pynvim
-xclip // to allow copying between vim and clipboard
-zsh
-inxi // outputs system stats useful for high level investigations
-acpitool // useful for digging into acpi config
-silversearcher-ag
-
-download and install chrome https://www.google.com/chrome/
-
-locate google-chrome.desktop and add `--password-store=basic` to the end of any Exec entries
-
-I had two on my machine
-
-/home/piers/.local/share/xfce4/helpers/google-chrome.desktop
-/usr/share/applications/google-chrome.desktop
-
-The first seemed to have no effect, so I had to go for the second.
+Locate google-chrome.desktop and add `--password-store=basic` to the end of any Exec entries.
 
 ssh-keygen -t rsa -b 3072
 
 Add key to github
 
-mkdir $HOME/projects
-cd $HOME/projects
-git clone git@github.com:piersy/dotfiles.git
-cd $HOME
-ln -s .zshrc projects/.zshrc
-chsh -s $(which zsh)
+run `dev_env_setup.sh`, this installs useful packages and configures zsh and nvim.
 
 log out and back in
-
-
-get neovim https://github.com/neovim/neovim/releases
-
-put it in
-
-mkdir $HOME/bin
-cd $HOME/bin
-mv $HOME/Downloads/nvim.appimage $HOME/bin/nvim
-ln -s nvim vim
-pip install --user --upgrade pynvim
-pip3 install --user --upgrade pynvim
-
-cd $HOME/.config
-
-git clone git@github.com:piersy/nvim.git
-
-now open vim and run :PlugInstall then close and open vim and you should have enverything setup.
-
-Remove the bell
-
-Add 'xset b off' to ~/.profile
-
-I wasn't sure where to put the command but i looked at the files sorted by access time using
-find files sorted by access date really useful for discovering what files are consulted on startup
-find . -type f -printf '%a %p\n' | sort -h | less
 
 ## Hardware config
 
@@ -204,7 +149,6 @@ I installed firmware-linux-free and firmware-linux-nonfree but didnt see any imp
 Then I installed the backports kernel with 
 sudo apt install -t stretch-backports linux-image-amd64
 
-apt-get source linux-image-$(uname -r) // get the source for your linux distro, useful in solving some issues.
 
 Configure touch pad using libinput
 
@@ -223,8 +167,6 @@ Option "AccelProfile" "adaptive"
 Option "AccelSpeed" "0.8"
 Option "DisableWhileTyping" "True"
 Option "TappingButtonMap" "lrm"
-
-
 
 Set pointer acceleration
 
@@ -255,12 +197,32 @@ No sound
 use lspci -v to list all the devices, anything without a kernel module is
 hardware that is not properly detected.
 
+## LightDM configuration
+
+It seems that debian when used with lightdm does not execute ~/.xinitrc
+
+Instead the flow is that lightdm loads a desktop file from /usr/share/xsessions desktop files can execute only a single command using the Exec entry, if you wan't to initialise something (or execute more than one program) at this point you need to write a script and call it from the Exec entry.
+
+Light dm has a desktop file as well with the Exec entry specifying default which actually means that light dm will look in ~/.dmrc to find out what session to load by defalut.
+
+If you want to initialise something that is going to be shared by all window managers you can edit/etc/lightdm/lightdm.conf and set display-setup-script or greeter-setup-script to perform general setup.
+
 ## Problems
 
-
-
-ACPI
+ACPI was problematic
 interesting text here - https://github.com/torvalds/linux/blob/master/Documentation/acpi/osi.txt
+
+# Useful commands
+
+Find files sorted by access date: 
+```
+find . -type f -printf '%a %p\n' | sort -h | less
+```
+
+Get source code of your kernel:
+```
+apt-get source linux-image-$(uname -r) // get the source for your linux distro, useful in solving some issues.
+```
 
 Which graphics card are you using?
 ```
