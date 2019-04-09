@@ -148,10 +148,13 @@ ssh-keygen -t rsa -b 3072
 
 Add key to github.
 
-Run the following, this installs useful packages and configures zsh and nvim.
+Run the following, setting the user email to use for git global config. (Note
+email parameterisation as yet untested) This installs useful packages and
+configures zsh and nvim.
 
 ```
 bash -c "$(
+	GIT_USER_EMAIL=<email_for_git_user> ; \
 	wget --quiet --output-document - \
 	https://raw.githubusercontent.com/piersy/debian-setup-steps/master/dev_env_setup.sh \
 	)"

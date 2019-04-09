@@ -10,28 +10,78 @@ fwupd \
 tree \
 htop \
 checkinstall \
-python3-pip \
-python-pip \
-xclip \
 zsh \
 inxi \
 acpitool \
-silversearcher-ag
+silversearcher-ag \
+cmake \
+ccache \
+build-essential
+
+echo ""
+echo "Setting global git options"
+git config --global url.ssh://git@github.com/.insteadof https://github.com/
+git config --global user.email $GIT_USER_EMAIL
+git config --global merge.conflictstyle diff3
+git config --global core.autocrlf input
+git config --global help.autocorrect 5
+
+echo ""
+echo "Installing golang"
+# Get the latest golang amd64 release
+
+golatestrelease=$(wget --quiet --output-document - \
+	https://github.com/golang/go/tags \
+	| perl -ne 'm/release-branch.* (.+?)$/ && print $1."\n"' \
+	| head -n 1)
+
+
+godownload=$golatestrelease.linux-amd64.tar.gz
+wget https://dl.google.com/go/$godownload
+mkdir -p $HOME/programs
+tar -xvf $godownload -C $HOME/programs
+rm $godownload
+mv $HOME/programs/go $HOME/programs/$golatestrelease
+sudo ln -s $HOME/programs/$golatestrelease /usr/local/go
+export PATH=$PATH:/usr/local/go/bin
 
 echo ""
 echo "Setting up zsh"
 mkdir -p $HOME/projects
 cd $HOME/projects
-git clone git@github.com:piersy/dotfiles.git
-cd $HOME
-ln -s projects/dotfiles/.zshrc .zshrc 
+git clone --recursive git@github.com:piersy/dotfiles.git
+ln -s projects/dotfiles/.zshrc $HOME/.zshrc 
+# Set root to have same config
+sudo ln -s $HOME/.zshrc /root/.zshrc 
 
 echo ""
 echo "Changing default shell to zsh, you will be prompted for your user password"
 chsh -s $(which zsh)
+# Set root to have same config
+sudo chsh -s $(which zsh)
+
+cd $HOME/projects
+git clone git@github.com:junegunn/fzf.git 
+./fzf/install --no-update-rc --completion --key-bindings
+
+mkdir -p $HOME/bin
+# Set root to have same config
+sudo ln -s $HOME/bin /root/bin
+
+ln -s fzf/bin/fzf $HOME/bin/fzf
 
 echo ""
 echo "Setting up neovim"
+
+echo "Installing pakcages needed for nvim plugins"
+# xclip allows system copy to be pasted with p in vim and vice versa.
+# python and python3 are required for any python plugins in nvim.
+# libboost-all-dev is needed to build cpsm.
+sudo apt install -y \
+xclip \
+python3-pip \
+python-pip \
+libboost-all-dev
 
 # Get the latest neovim appimage url
 neovimurl=$(wget --quiet --output-document - \
@@ -39,7 +89,6 @@ neovimurl=$(wget --quiet --output-document - \
 	| grep '\.appimage"' \
 	| perl -ne 'm/"browser_download_url":.*?"(.+?)"$/ && print $1."\n"')
 
-mkdir -p $HOME/bin
 cd $HOME/bin
 wget --output-document nvim $neovimurl
 chmod +x nvim
@@ -50,6 +99,12 @@ pip3 install --user --upgrade pynvim
 
 cd $HOME/.config
 git clone git@github.com:piersy/nvim.git
+mkdir -p nvim/autoload
+
+# Put vim plug in place
+wget --quiet --output-document nvim/autoload/plug.vim \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
 
 echo ""
 echo "zsh and nvim installed"
