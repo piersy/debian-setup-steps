@@ -1,14 +1,21 @@
-# debian-setup-steps
+# debian-setup-steps (NOT FIT FOR PUBLIC CONSUMPTION, THIS IS A WORK IN PROGRESS)
+ 
+The steps currently described are for installing Debain from
+firmware-9.8.0-amd64-netinst.iso or firmware-buster-DI-alpha5-amd64-netinst.iso
+on a dell xps 15 9570, I couldn't get either to work satisfactorily, so I gave
+up and installed ubuntu from
+https://github.com/JackHack96/dell-xps-9570-ubuntu-respin instead. This
+document serves as a starting point in the case I try to install debian again
+at a later date.
 
-Debian Stretch
+The (Environment setup)[#Environment-setup] section is however still useful
+since it is independent of Linux distributions and releases.
 
-Adding custom drivers
+# Pre-install
 
-# Preinstall
-
-## Bios firmware updates
-Start by checking for bios firmware updates, if found they may require windows
-or dos to be installed, so install them before destroying the existing os.
+## BIOS firmware updates
+Start by checking for BIOS firmware updates, if found they may require windows
+or dos to be installed, so install them before destroying the existing OS.
 
 If you already destroyed the existing OS then follow these steps:
 
@@ -18,17 +25,17 @@ were just not bootable.*
 
 1. You may be able to use fwupd `sudo apt install fwupd` to grab the firmware
    and install it automatically. 
-1. If you have a Dell pc you may be able to stick the bios exe onto a FAT32
+1. If you have a Dell pc you may be able to stick the BIOS exe onto a FAT32
    drive and then apply the update via the flash update option of the boot menu
    (hold F12 on startup for the boot menu). Dell page describing the process
    [here](https://www.dell.com/support/article/uk/en/ukdhs1/sln171755/updating-the-dell-bios-in-linux-and-ubuntu-environments)
 1. Have a look at the [debian](https://wiki.debian.org/Firmware/Updates) and
    [arch](https://wiki.archlinux.org/index.php/Flashing_BIOS_from_Linux) pages
-   covering this, the arch one has a good looking guide to createing a bootable
-   dos drive (though untested).
+   covering this, the arch one has a good looking guide to creating a bootable
+   DOS drive (though untested).
 
-## Bios Tweaks for Dell XPS 15 9570
-Needed to configure hard disk to achi mode instead of raid, the hard disks were not being discovered.
+## BIOS Tweaks for Dell XPS 15 9570
+Needed to configure hard disk to ACHI mode instead of RAID, the hard disks were not being discovered.
 
 # Install
 
@@ -38,16 +45,16 @@ save you a heap of trouble. Find the added non free firmware iso
 you will need to click through a few pages to find the right iso for you.
 
 Note: Despite complaining during install that certain firmware files could not
-be found, my newtwork card did actually work, so sometimes it's just worth
+be found, my network card did actually work, so sometimes it's just worth
 pressing on to see if stuff works.
 
-Copy it onto a usb drive like so:
+Copy it onto a USB drive like so:
 ```
 sudo dd if=firmware-9.8.0-amd64-netinst.iso of=/dev/sdb bs=32MB
 ```
 Note: make sure you are dd ing to the right drive use `sudo fdisk -l` to check which drive is which.
 
-Restart and boot from the usb, despite setting my boot order to have usb first
+Restart and boot from the USB, despite setting my boot order to have USB first
 my XPS 15 seemed to ignore it so I just booted with the F12.
 
 Useful keys to know:
@@ -76,12 +83,18 @@ What type partition table:
 **These steps are for a gpt partition table**
 1. Select the drive to partition, follow the prompts to erase all partitions.
 1. Choose gpt partition table type.
-1. Select the free space and create an efi partition at the beginning of the drive 1G to be safe or 500MB if you are short on space.
-//1. Select the free space and create a boot partition, set its use to be 'Ext 4 journaling file system'.
-1. Select the remaining free space and create another partition using all the space and set its use to be 'physical volume for encryption'
-1. Back on the main screen select 'configure encrypted volumes' and accept the propmpt and then choose finish.
-1. The installer will write random data all across the drive, this makes free space indistinguishable from encrypted data. This process takes some time.
-1. Once done select 'Configure the Logical Volume Manager' and write the current partitioning scheme to disk.
+1. Select the free space and create an efi partition at the beginning of the
+   drive 1G to be safe or 500MB if you are short on space.
+1. Select the free space and create a boot partition, set its use to be 'Ext 4
+   journaling file system'.
+1. Select the remaining free space and create another partition using all the
+   space and set its use to be 'physical volume for encryption'
+1. Back on the main screen select 'configure encrypted volumes' and accept the
+   propmpt and then choose finish.
+1. The installer will write random data all across the drive, this makes free
+   space indistinguishable from encrypted data. This process takes some time.
+1. Once done select 'Configure the Logical Volume Manager' and write the
+   current partitioning scheme to disk.
 1. In the Logical Volume Manager create a volume group and all the volumes you
    want i'm going for a swap partition, /home and /.
 1. Once done you will now need to select the free space in each of your logical
@@ -93,7 +106,7 @@ What type partition table:
 ## Installing the base system
 
 When prompted choose the generic kernel, this ensures that when you upgrade
-your kernel can be updgraded automatically.
+your kernel can be upgraded automatically.
 
 ## Installing GRUB
 
@@ -102,9 +115,6 @@ When I tried to install grub it failed to install on a fully encrypted disk.
 The workaround is to drop to the terminal ALT+F2 and edit /target/etc/default/grub to add the line
 `GRUB_ENABLE_CRYPTODISK=y`
 And then retry the grub install
-
------
-
 
 ## Installing Software
 
@@ -130,17 +140,24 @@ If you want to share sudo between terminals
 create file /etc/sudoers.d/01_local with content `Defaults !tty_tickets`
 
 Download and install chrome https://www.google.com/chrome. I don't store
-passwords in chrome so I don't need a keyring itegration.
+passwords in chrome so I don't need a keyring integration.
 
 Locate google-chrome.desktop and add `--password-store=basic` to the end of any Exec entries.
 
 ssh-keygen -t rsa -b 3072
 
-Add key to github
+Add key to github.
 
-run `dev_env_setup.sh`, this installs useful packages and configures zsh and nvim.
+Run the following, this installs useful packages and configures zsh and nvim.
 
-log out and back in
+```
+bash -c "$(
+	wget --quiet --output-document - \
+	https://raw.githubusercontent.com/piersy/debian-setup-steps/master/dev_env_setup.sh \
+	)"
+```
+
+Log out and back in.
 
 ## Hardware config
 
@@ -149,10 +166,9 @@ I installed firmware-linux-free and firmware-linux-nonfree but didnt see any imp
 Then I installed the backports kernel with 
 sudo apt install -t stretch-backports linux-image-amd64
 
-
 Configure touch pad using libinput
 
-useful page from dell support - https://www.dell.com/support/article/uk/en/ukdhs1/sln308258/precision-xps-ubuntu-general-touchpad-mouse-issue-fix?lang=en
+Useful page from dell support - https://www.dell.com/support/article/uk/en/ukdhs1/sln308258/precision-xps-ubuntu-general-touchpad-mouse-issue-fix?lang=en
 
 My config was here `/usr/share/X11/xorg.conf.d/40-libinput.conf`
 
@@ -178,8 +194,10 @@ To set a prop with xinput
 
 xinput --set-prop 'SynPS/2 Synaptics TouchPad' 'libinput Accel Speed' 1.0
 
-sudo gedit /usr/share/X11/xorg.conf.d/*libinput.conf
-Now find the section that has the wording - Identifier "libinput touchpad catchall" and type in the following changes between the lines MatchDevicePath "/dev/input/event*" and Driver "libinput":
+sudo gedit /usr/share/X11/xorg.conf.d/\*libinput.conf Now find the section that
+has the wording - Identifier "libinput touchpad catchall" and type in the
+following changes between the lines MatchDevicePath "/dev/input/event\*" and
+Driver "libinput":
 
 Option "Tapping" "True"
 Option "TappingDrag" "True"
@@ -201,16 +219,23 @@ hardware that is not properly detected.
 
 It seems that debian when used with lightdm does not execute ~/.xinitrc
 
-Instead the flow is that lightdm loads a desktop file from /usr/share/xsessions desktop files can execute only a single command using the Exec entry, if you wan't to initialise something (or execute more than one program) at this point you need to write a script and call it from the Exec entry.
+Instead the flow is that lightdm loads a desktop file from /usr/share/xsessions
+desktop files can execute only a single command using the Exec entry, if you
+want to initialise something (or execute more than one program) at this point
+you need to write a script and call it from the Exec entry.
 
-Light dm has a desktop file as well with the Exec entry specifying default which actually means that light dm will look in ~/.dmrc to find out what session to load by defalut.
+Light dm has a desktop file as well with the Exec entry specifying default
+which actually means that light dm will look in ~/.dmrc to find out what
+session to load by default.
 
-If you want to initialise something that is going to be shared by all window managers you can edit/etc/lightdm/lightdm.conf and set display-setup-script or greeter-setup-script to perform general setup.
+If you want to initialise something that is going to be shared by all window
+managers you can edit/etc/lightdm/lightdm.conf and set display-setup-script or
+greeter-setup-script to perform general setup.
 
 ## Problems
 
-ACPI was problematic
-interesting text here - https://github.com/torvalds/linux/blob/master/Documentation/acpi/osi.txt
+ACPI was problematic, interesting text here -
+https://github.com/torvalds/linux/blob/master/Documentation/acpi/osi.txt
 
 # Useful commands
 
@@ -221,7 +246,7 @@ find . -type f -printf '%a %p\n' | sort -h | less
 
 Get source code of your kernel:
 ```
-apt-get source linux-image-$(uname -r) // get the source for your linux distro, useful in solving some issues.
+apt-get source linux-image-$(uname -r)
 ```
 
 Which graphics card are you using?
@@ -230,3 +255,8 @@ glxinfo | grep render
 ```
 OpenGL renderer entry will give you the answer:
 
+List all the devices, anything without a kernel module is hardware that is not
+properly detected.
+```
+lspci -v
+```
