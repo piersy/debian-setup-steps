@@ -53,6 +53,8 @@ git clone --recursive git@github.com:piersy/dotfiles.git
 ln -s projects/dotfiles/.zshrc $HOME/.zshrc 
 # Set root to have same config
 sudo ln -s $HOME/.zshrc /root/.zshrc 
+sudo mkdir -p /root/projects
+sudo ln -s $HOME/projects/dotfiles /root/projects/dotfiles
 
 echo ""
 echo "Changing default shell to zsh, you will be prompted for your user password"
@@ -64,11 +66,13 @@ cd $HOME/projects
 git clone git@github.com:junegunn/fzf.git 
 ./fzf/install --no-update-rc --completion --key-bindings
 
+# copy fzf config for root
+sudo ln -s $HOME/.fzf.zsh /root/.fzf.zsh
+sudo ln -s $HOME/.fzf.bash /root/.fzf.bash
+
 mkdir -p $HOME/bin
 # Set root to have same config
 sudo ln -s $HOME/bin /root/bin
-
-ln -s fzf/bin/fzf $HOME/bin/fzf
 
 echo ""
 echo "Setting up neovim"
@@ -104,6 +108,10 @@ mkdir -p nvim/autoload
 # Put vim plug in place
 wget --quiet --output-document nvim/autoload/plug.vim \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+# let root use the same nvim config
+sudo mkdir -p /root/.config
+sudo ln -s $HOME/config/nvim /root/.config/nvim
 
 
 echo ""
