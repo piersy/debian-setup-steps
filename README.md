@@ -263,3 +263,30 @@ properly detected.
 ```
 lspci -v
 ```
+
+# Fonts
+
+I like SF Mono as a font
+
+get a copy here:
+https://github.com/ZulwiyozaPutra/SF-Mono-Font
+
+or one with powerline symbols:
+https://github.com/artofrawr/powerline-fonts/raw/master/fonts/SFMono/SF%20Mono%20Regular%20Nerd%20Font%20Complete.otf
+(as yet untested since gnome terminal does not show patched fonts?)
+https://superuser.com/questions/1335155/patched-fonts-not-showing-up-on-gnome-terminal
+
+I've included the font config I was using for the SF Mono it should be placed here ~/.config/fontconfig/fonts.conf
+
+Useful commands for working with fonts.
+
+Force reload all fonts:
+fc-cache -fv 
+
+View detailed info on all fonts
+fc-list -v | less
+
+View the fallback font heirarchy for a font
+fc-match -s "SF Mono"
+
+
