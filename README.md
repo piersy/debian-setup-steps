@@ -291,6 +291,14 @@ fc-list -v | less
 View the fallback font heirarchy for a font
 fc-match -s "SF Mono"
 
+# Compose key
+
+set XKBOPTIONS="compose:ralt" in /etc/default/keyboard
+
+Then run the following to set the compose key for this X session only:
+setxkbmap -option compose:ralt
+
+This should go in the script
 
 
 
