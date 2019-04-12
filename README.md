@@ -276,6 +276,8 @@ https://github.com/artofrawr/powerline-fonts/raw/master/fonts/SFMono/SF%20Mono%2
 (as yet untested since gnome terminal does not show patched fonts?)
 https://superuser.com/questions/1335155/patched-fonts-not-showing-up-on-gnome-terminal
 
+Or a thread with some useful info on patching SF Mono yourself - https://github.com/powerline/fonts/issues/189
+
 I've included the font config I was using for the SF Mono it should be placed here ~/.config/fontconfig/fonts.conf
 
 Useful commands for working with fonts.
@@ -288,5 +290,7 @@ fc-list -v | less
 
 View the fallback font heirarchy for a font
 fc-match -s "SF Mono"
+
+
 
 
