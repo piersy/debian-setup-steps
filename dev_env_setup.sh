@@ -25,6 +25,7 @@ git config --global user.email $GIT_USER_EMAIL
 git config --global merge.conflictstyle diff3
 git config --global core.autocrlf input
 git config --global help.autocorrect 5
+git config --global color.diff.meta "magenta"
 
 echo ""
 echo "Installing golang"
